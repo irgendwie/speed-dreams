@@ -31,7 +31,6 @@
 #include <robottools.h>
 #include <robot.h>
 
-#include <thread>
 #include <served/served.hpp>
 
 #include <obstacleSensors.h>
@@ -40,7 +39,6 @@
 using json = nlohmann::json;
 
 static served::net::server *server;
-static std::thread *thr;
 static served::multiplexer mux;
 
 static ObstacleSensors *obstSens;
@@ -161,7 +159,7 @@ newrace(int index, tCarElt* car, tSituation *s)
 										 });
 
 	server = new served::net::server("0.0.0.0", "9080", mux);
-	thr = new std::thread(&served::net::server::run, server, 10);
+	server->run(10, false);
 
 	obstSens = new ObstacleSensors(NULL, car);
 	// front
